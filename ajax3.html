@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX External API</title>
+    <style>
+        .users{
+            display:flex;
+            background:#f4f4f4;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .users ul{
+            list-style: none;
+        }
+        
+    </style>
+</head>
+<body>
+    <button id="button">Load Github Users</button>
+    <br><br>
+    <h1>Github Users</h1>
+    <div id="users"></div>
+    <script>
+        document.getElementById('button').addEventListener('click', loadUsers);
+        //Load Github Users
+        function loadUsers() {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://api.github.com/users/ikoral', true);
+            xhr.onload = function() {
+                if(this.status === 200) {
+                    let users = [];
+                    users.push(JSON.parse(this.responseText));
+                    console.log(users);
+                    let output = '';
+                    for (let i in users) {
+                        output += `<div class="users">
+                                    <img src="${users[i].avatar_url}" width="200" height="200">
+                                    <ul>
+                                        <li>ID: ${users[i].id} </li>
+                                        <li>Login Name: ${users[i].login}</li>
+                                        <li>Name: ${users[i].name}</li>
+                                        <li>Company: ${users[i].company}</li>
+                                        <li>Github Start Date: ${users[i].created_at}</li>
+                                        <li>Location: ${users[i].location}</li>
+                                    </ul>
+                                  </div>`
+                    }
+                    document.getElementById('users').innerHTML = output;
+                } 
+            }
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
