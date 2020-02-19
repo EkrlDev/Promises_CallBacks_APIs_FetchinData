@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX -Plain Text</title>
+</head>
+<body>
+    <button id="button">Get Text File</button>
+    <br><br>
+    <div id="text"></div>
+    <script>
+        //create event listener
+        document.getElementById('button').addEventListener('click', loadText);
+        function loadText(){
+           //first we create an XHR object
+           let xhr = new XMLHttpRequest();//it returns an object
+           //we define an OPEN function it takes three parameters- type (GET,POST), url/file, async(true for async)
+           xhr.open('GET', 'sample.txt', true);
+
+           xhr.onprogress = function() {
+               //OPTIONAL-used for visualisation of loadings
+           }
+
+           //there is two function that we can use here "onload" and "onreadystatechange"(older way)
+           xhr.onload = function() {
+               //we gonna check for the status of the response
+               if(this.status === 200) {
+                   //console.log(this.responseText);//responseText property of the xhr object
+                   document.getElementById('text').innerHTML = this.responseText;
+               } else if(this.status === 404) {
+                document.getElementById('text').innerHTML = 'Page Not Found!';
+               }
+           }
+           //Also we shoul use error function
+           xhr.onerror = function() {
+               console.log('Request Error...')
+           }
+
+
+           /* old way of onload
+           xhr.onreadystatechange = function() {
+               if(this.status === 200 && this.readyState === 4) {//4 for request finished and response is ready
+                   console.log(this.responseText);
+               } //4 for request finished and response is ready
+           }
+           */
+           //send request
+           xhr.send(); 
+        }
+    </script>
+</body>
+</html>
